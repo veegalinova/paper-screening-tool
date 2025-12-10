@@ -145,6 +145,18 @@ const PaperScreeningApp = () => {
     });
   };
 
+  const isPaperLabeled = (row) => {
+    const status = row.include_not_include || '';
+    const reason = row.reason_for_exclusion || '';
+    const dataset = row.db_used_in_the_study || '';
+    
+    if (status === 'maybe') return true;
+    if (status === 'exclude' && reason.trim()) return true;
+    if (status === 'include' && dataset.trim()) return true;
+    
+    return false;
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -170,7 +182,10 @@ const PaperScreeningApp = () => {
       });
       
       setCsvData(rows);
-      setCurrentIndex(0);
+      
+      // Find first unlabeled paper
+      const firstUnlabeledIndex = rows.findIndex(row => !isPaperLabeled(row));
+      setCurrentIndex(firstUnlabeledIndex >= 0 ? firstUnlabeledIndex : 0);
     };
     reader.readAsText(file);
   };
