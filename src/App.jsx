@@ -623,7 +623,7 @@ const PaperScreeningApp = () => {
                   formData.include_not_include === 'exclude' ? 'bg-red-100 text-red-800' :
                   'bg-yellow-100 text-yellow-800'
                 }`}>
-                  Auto-Decision: {formData.include_not_include.toUpperCase()}
+                  Decision: {formData.include_not_include.toUpperCase()}
                   {formData.reason_for_exclusion && ` (${formData.reason_for_exclusion})`}
                 </div>
               )}
@@ -657,7 +657,7 @@ const PaperScreeningApp = () => {
             )}
 
             {formData.include_not_include === 'include' && (
-              <div className={`mb-4 p-4 rounded-lg ${!formData.db_used_in_the_study.trim() ? 'bg-red-50 border-2 border-red-400 animate-pulse' : 'bg-green-50 border border-green-300'}`}>
+              <div className={`mb-4 p-4 rounded-lg ${!formData.db_used_in_the_study.trim() ? 'bg-red-50 border-2 border-red-400' : 'bg-green-50 border border-green-300'}`}>
                 <label className="block font-semibold mb-2 flex items-center">
                   <span>Datasets Used</span>
                   <span className="text-red-600 ml-1">*</span>
