@@ -149,10 +149,14 @@ const PaperScreeningApp = () => {
     const status = row.include_not_include || '';
     const reason = row.reason_for_exclusion || '';
     const dataset = row.db_used_in_the_study || '';
+    const primaryTask = row.primary_task || '';
+    const modelType = row.model_type || '';
+    const inputRegions = row.input_regions || '';
+    const organism = row.organism || '';
     
     if (status === 'maybe') return true;
     if (status === 'exclude' && reason.trim()) return true;
-    if (status === 'include' && dataset.trim()) return true;
+    if (status === 'include' && dataset.trim() && primaryTask.trim() && modelType.trim() && inputRegions.trim() && organism.trim()) return true;
     
     return false;
   };
@@ -219,8 +223,15 @@ const PaperScreeningApp = () => {
 
   const saveCurrentPaper = () => {
     const updatedData = [...csvData];
+    const currentRow = updatedData[currentIndex];
+    // Preserve the original title/url field name used in CSV
+    const titleField = currentRow.title !== undefined ? 'title' : currentRow.Title !== undefined ? 'Title' : currentRow.paper_title !== undefined ? 'paper_title' : 'title';
+    const urlField = currentRow.url !== undefined ? 'url' : currentRow.URL !== undefined ? 'URL' : currentRow.link !== undefined ? 'link' : currentRow.paper_url !== undefined ? 'paper_url' : currentRow.doi !== undefined ? 'doi' : 'url';
+    
     updatedData[currentIndex] = {
-      ...updatedData[currentIndex],
+      ...currentRow,
+      [titleField]: paperTitle,
+      [urlField]: paperUrl,
       include_not_include: formData.include_not_include,
       reason_for_exclusion: formData.reason_for_exclusion,
       db_used_in_the_study: formData.db_used_in_the_study,
@@ -250,8 +261,15 @@ const PaperScreeningApp = () => {
   const exportCSV = () => {
     // Save current paper directly to the data array
     const updatedData = [...csvData];
+    const currentRow = updatedData[currentIndex];
+    // Preserve the original title/url field name used in CSV
+    const titleField = currentRow.title !== undefined ? 'title' : currentRow.Title !== undefined ? 'Title' : currentRow.paper_title !== undefined ? 'paper_title' : 'title';
+    const urlField = currentRow.url !== undefined ? 'url' : currentRow.URL !== undefined ? 'URL' : currentRow.link !== undefined ? 'link' : currentRow.paper_url !== undefined ? 'paper_url' : currentRow.doi !== undefined ? 'doi' : 'url';
+    
     updatedData[currentIndex] = {
-      ...updatedData[currentIndex],
+      ...currentRow,
+      [titleField]: paperTitle,
+      [urlField]: paperUrl,
       include_not_include: formData.include_not_include,
       reason_for_exclusion: formData.reason_for_exclusion,
       db_used_in_the_study: formData.db_used_in_the_study,
@@ -375,7 +393,7 @@ const PaperScreeningApp = () => {
             type="text"
             value={customValue}
             onChange={(e) => setCustomValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && addCustomValue()}
+            onKeyDown={(e) => e.key === 'Enter' && addCustomValue()}
             placeholder="Add custom value..."
             className={`flex-1 text-sm rounded px-2 py-1 ${showRequired ? 'border-2 border-red-400' : 'border border-gray-300'}`}
           />
