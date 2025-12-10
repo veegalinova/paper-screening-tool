@@ -475,6 +475,16 @@ const PaperScreeningApp = () => {
               
               <div className="space-y-2 mb-3">
                 <p className="text-xs font-semibold text-gray-600 uppercase">Inclusion Requirements (ALL must be checked):</p>
+
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={criteriaChecks.has_ai_dl_model === true}
+                    onChange={(e) => setCriteriaChecks({...criteriaChecks, has_ai_dl_model: e.target.checked ? true : null})}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">Uses AI/Deep Learning model (not traditional ML)</span>
+                </label>
                 
                 <label className="flex items-center space-x-3 cursor-pointer">
                   <input
@@ -484,16 +494,6 @@ const PaperScreeningApp = () => {
                     className="w-4 h-4"
                   />
                   <span className="text-sm">Develops/applies AI/DL for mRNA stability, degradation, or translation efficiency</span>
-                </label>
-                
-                <label className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={criteriaChecks.has_ai_dl_model === true}
-                    onChange={(e) => setCriteriaChecks({...criteriaChecks, has_ai_dl_model: e.target.checked ? true : null})}
-                    className="w-4 h-4"
-                  />
-                  <span className="text-sm">Uses AI/Deep Learning model (not traditional ML)</span>
                 </label>
                 
                 <label className="flex items-center space-x-3 cursor-pointer">
@@ -603,7 +603,7 @@ const PaperScreeningApp = () => {
                     onChange={(e) => setCriteriaChecks({...criteriaChecks, is_duplicate: e.target.checked ? true : null})}
                     className="w-4 h-4"
                   />
-                  <span className="text-sm">Duplicate or derivative version</span>
+                  <span className="text-sm">Duplicate or derivative version (specify in comments)</span>
                 </label>
                 
                 <label className="flex items-center space-x-3 cursor-pointer">
@@ -687,7 +687,7 @@ const PaperScreeningApp = () => {
             <CheckboxGroup
               field="primary_task"
               label="Primary Task"
-              options={['mrna_half_life_prediction', 'translation_efficiency', 'ribosome_density', 'mrna_degradation_sites', 'utr_design', 'other']}
+              options={['mrna_half_life_prediction', 'translation_efficiency', 'ribosome_density', 'mrna_degradation_sites', 'utr_design']}
             />
 
             <CheckboxGroup
@@ -705,7 +705,7 @@ const PaperScreeningApp = () => {
             <CheckboxGroup
               field="organism"
               label="Organism"
-              options={['human', 'mouse', 'yeast', 'other', 'missing']}
+              options={['human', 'mouse', 'yeast', 'missing']}
             />
           </div>
         </div>
