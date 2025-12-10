@@ -299,8 +299,11 @@ const PaperScreeningApp = () => {
     }));
   };
 
-  const CheckboxGroup = ({ field, options, label }) => {
+  const CheckboxGroup = ({ field, options, label, required = false }) => {
     const [customValue, setCustomValue] = useState('');
+    const isEmpty = formData[field].length === 0;
+    const showRequired = required && isEmpty;
+    const showFilled = required && !isEmpty;
     
     const addCustomValue = () => {
       if (customValue.trim() && !formData[field].includes(customValue.trim())) {
@@ -320,8 +323,23 @@ const PaperScreeningApp = () => {
     };
 
     return (
-      <div className="mb-4">
-        <label className="block font-semibold mb-2">{label}</label>
+      <div className={`mb-4 p-3 rounded-lg ${showRequired ? 'bg-red-50 border-2 border-red-400' : showFilled ? 'bg-green-50 border border-green-300' : ''}`}>
+        <label className="block font-semibold mb-2 flex items-center">
+          <span>{label}</span>
+          {required && <span className="text-red-600 ml-1">*</span>}
+          {showRequired && (
+            <span className="ml-2 text-sm font-normal text-red-600 flex items-center">
+              <AlertCircle className="w-4 h-4 mr-1" />
+              Required!
+            </span>
+          )}
+          {showFilled && (
+            <span className="ml-2 text-sm font-normal text-green-600 flex items-center">
+              <CheckCircle className="w-4 h-4 mr-1" />
+              Filled
+            </span>
+          )}
+        </label>
         <div className="grid grid-cols-2 gap-2 mb-2">
           {options.map(opt => (
             <label key={opt} className="flex items-center space-x-2 cursor-pointer">
@@ -359,7 +377,7 @@ const PaperScreeningApp = () => {
             onChange={(e) => setCustomValue(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && addCustomValue()}
             placeholder="Add custom value..."
-            className="flex-1 text-sm border border-gray-300 rounded px-2 py-1"
+            className={`flex-1 text-sm rounded px-2 py-1 ${showRequired ? 'border-2 border-red-400' : 'border border-gray-300'}`}
           />
           <button
             onClick={addCustomValue}
@@ -718,24 +736,28 @@ const PaperScreeningApp = () => {
               field="primary_task"
               label="Primary Task"
               options={['mrna_half_life_prediction', 'translation_efficiency', 'ribosome_density', 'mrna_degradation_sites', 'utr_design']}
+              required={formData.include_not_include === 'include'}
             />
 
             <CheckboxGroup
               field="model_type"
               label="Model Type"
               options={['cnn', 'rnn', 'transformer', 'graph_nn', 'mlp', 'diffusion', 'hybrid']}
+              required={formData.include_not_include === 'include'}
             />
 
             <CheckboxGroup
               field="input_regions"
               label="Input Regions"
               options={['5utr', 'cds', '3utr', 'full_mrna', 'sequence_plus_structure']}
+              required={formData.include_not_include === 'include'}
             />
 
             <CheckboxGroup
               field="organism"
               label="Organism"
               options={['human', 'mouse', 'yeast']}
+              required={formData.include_not_include === 'include'}
             />
           </div>
         </div>
