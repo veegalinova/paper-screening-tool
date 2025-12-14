@@ -154,9 +154,14 @@ const PaperScreeningApp = () => {
     const inputRegions = row.input_regions || '';
     const organism = row.organism || '';
     
+    // All annotation fields must be filled for any status
+    const hasAnnotations = primaryTask.trim() && modelType.trim() && inputRegions.trim() && organism.trim();
+    
+    if (!hasAnnotations) return false;
+    
     if (status === 'maybe') return true;
     if (status === 'exclude' && reason.trim()) return true;
-    if (status === 'include' && dataset.trim() && primaryTask.trim() && modelType.trim() && inputRegions.trim() && organism.trim()) return true;
+    if (status === 'include' && dataset.trim()) return true;
     
     return false;
   };
@@ -754,28 +759,28 @@ const PaperScreeningApp = () => {
               field="primary_task"
               label="Primary Task"
               options={['mrna_half_life_prediction', 'translation_efficiency', 'ribosome_density', 'mrna_degradation_sites', 'utr_design']}
-              required={formData.include_not_include === 'include'}
+              required={true}
             />
 
             <CheckboxGroup
               field="model_type"
               label="Model Type"
               options={['cnn', 'rnn', 'transformer', 'graph_nn', 'mlp', 'diffusion', 'hybrid']}
-              required={formData.include_not_include === 'include'}
+              required={true}
             />
 
             <CheckboxGroup
               field="input_regions"
               label="Input Regions"
               options={['5utr', 'cds', '3utr', 'full_mrna', 'sequence_plus_structure']}
-              required={formData.include_not_include === 'include'}
+              required={true}
             />
 
             <CheckboxGroup
               field="organism"
               label="Organism"
               options={['human', 'mouse', 'yeast']}
-              required={formData.include_not_include === 'include'}
+              required={true}
             />
           </div>
         </div>
